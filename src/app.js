@@ -1,71 +1,70 @@
 import * as yup from 'yup';
-import onChange from 'on-change';
-import keyBy from 'lodash/keyBy.js';
 import 'bootstrap';
 import './style.scss';
+
+import watchedState from './view.js';
 
 const schema = yup.object().shape({
   url: yup.string().url().nullable(),
 });
 
+/* const validate = (fields) => {
+  schema.validate(fields) // DONE - rewrite to async 
+}; */
 
-const validate = (fields) => {
-  try {
-    schema.validateSync(fields, { abortEarly: false });
-    return {};
-  } catch (e) {
-    return keyBy(e.inner, 'path');
-  }
-};
-
-const render = () => {};
+const render = () => {}; // TODO - write render
 
 export default () => {
-  const elements = {
-    container: document.querySelector('.container-fluid'),
+  /* const elements = {
     form: document.querySelector('.form-floating'),
     fields: {
       url: document.getElementById('url-input'),
     },
     submitButton: document.querySelector('button[type="submit"]'),
-  };
+  }; */
 
   // Model
-  const state = {
+  const initialState = {
     inputUrl: {
       state: 'invalid',
       data: {
         url: '',
       },
+      feeds: [],
       errors: [],
     },
   };
 
   // View
-  const watchedState = onChange(state, (path, value, prev) => {
-    // console.log(state);
-    /* const buttn = elements.submitButton;//document.querySelector('input.btn');
-    if (path === 'inputUrl.state') {
-      if (value === 'valid') {
-        buttn.disabled = false;
-      } else {
-        buttn.disabled = true;
-      }
-    } */
-  });
-
+  //const state = watchedState(initialState);
+ 
   // Controller
-  console.log(elements.fields.url);
-  elements.fields.url.addEventListener('input', (e) => {
+
+  const form = document.querySelector('.form-floating');
+  const url = document.querySelector('.form-control');
+  console.log(url);
+
+  url.addEventListener('submit', (e) => {
     e.preventDefault();
-    watchedState.inputUrl.data.url = e.target.value;
-    const val = validate(state.inputUrl.data);
-    console.log(e.target.value);
-    console.log(val);
+    console.log(e.target.value)
+    /* schema.validate(e.target.value)
+      .then((val) => {
+        console.log(val);
+        /* state.inputUrl.errors = [];
+        state.inputUrl.state = 'valid';
+        state.inputUrl.feeds.push(val);
+        fields.url.value = '';
+      })
+      .catch((e) => {
+        /* state.inputUrl.errors.push(e);
+        state.inputUrl.state = 'invalid';
+        console.log(e);
+      }); */
 
-    if (state.inputUrl.state === 'invalid') {
-      elements.fields.url.classList.add('is-invalid');
-    }
-
+    /* if (state.inputUrl.state === 'valid') {
+      elements.fields.url.classList.remove('is-invalid');
+    } else {
+      elements.fields.url.classList.add('is-invalid'); // DONE - remove class if valid url
+    } */
   });
 };
