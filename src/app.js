@@ -36,27 +36,31 @@ export default () => {
   };
 
   // View
-  //const state = watchedState(initialState);
+  const state = watchedState(initialState);
  
   // Controller
 
-  const form = document.querySelector('.form-floating');
-  const url = document.querySelector('.form-control');
-  console.log(url);
+  const form = document.querySelector('.rss-form');
+  const urlInputForm = document.querySelector('#url-input');
 
-  url.addEventListener('submit', (e) => {
+  console.log(form);
+  
+
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
-    console.log(e.target.value)
+    const formData = new FormData(e.target);
+    const value = formData.get('url');
+    console.log(value);
     /* schema.validate(e.target.value)
       .then((val) => {
         console.log(val);
-        /* state.inputUrl.errors = [];
+        state.inputUrl.errors = [];
         state.inputUrl.state = 'valid';
         state.inputUrl.feeds.push(val);
         fields.url.value = '';
       })
       .catch((e) => {
-        /* state.inputUrl.errors.push(e);
+        state.inputUrl.errors.push(e);
         state.inputUrl.state = 'invalid';
         console.log(e);
       }); */
