@@ -4,13 +4,7 @@ import './style.scss';
 
 import watchedState from './view.js';
 
-
-
-/* const validate = (fields) => {
-  schema.validate(fields) // DONE - rewrite to async 
-}; */
-
-const render = () => {}; // TODO - write render
+// const render = () => {}; // TODO - write render
 
 export default () => {
   const elements = {
@@ -37,7 +31,7 @@ export default () => {
   const state = watchedState(initialState);
 
   // Controller
-  const schema = yup.string().required().url().nullable().notOneOf(); // FIX - do not working notOneOf from Proxy Array
+  const schema = yup.string().required().url().nullable(); // TODO - rewrite to yup notOneOf
 
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -47,20 +41,21 @@ export default () => {
 
     schema.validate(state.inputUrl.data.url)
       .then((val) => {
-        console.log(val);
         state.inputUrl.errors = [];
-        filter.push(val);
         elements.fields.url.value = '';
-        state.inputUrl.stat = 'valid';
-        console.log('feeds is: ', filter);
-        console.log('state is: ', state.inputUrl.stat);
-        elements.fields.url.classList.remove('is-invalid');
+        if (!state.inputUrl.feeds.includes(val)) {
+          state.inputUrl.feeds.push(val);
+          state.inputUrl.stat = 'valid';
+          elements.fields.url.classList.remove('is-invalid');
+        } else {
+          state.inputUrl.stat = 'invalid';
+          throw new Error('url already in feeds');
+        }
       })
-      .catch((e) => {
-        state.inputUrl.errors.push(e);
+      .catch((err) => {
+        state.inputUrl.errors.push(err);
         state.inputUrl.stat = 'invalid';
         elements.fields.url.classList.add('is-invalid');
-        console.log(e);
       });
   });
 };
