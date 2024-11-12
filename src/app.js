@@ -1,5 +1,8 @@
+import i18next from 'i18next';
+
 import * as yup from 'yup';
 import 'bootstrap';
+import ru from './texts.js';
 import './style.scss';
 
 import watchedState from './view.js';
@@ -7,6 +10,12 @@ import watchedState from './view.js';
 // const render = () => {}; // TODO - write render
 
 export default () => {
+  i18next.init({
+    lng: 'ru', 
+    debug: true, 
+    resources: { ru } 
+  });
+
   const elements = {
     form: document.querySelector('.rss-form'),
     fields: {

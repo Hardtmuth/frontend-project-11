@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
+    "i18next": "^23.16.5",
     "lodash": "^4.17.21",
     "on-change": "^5.0.1",
     "sass": "^1.77.6",
