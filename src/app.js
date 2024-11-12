@@ -11,9 +11,9 @@ import validate from './validate.js';
 
 export default () => {
   i18next.init({
-    lng: 'ru', 
-    debug: true, 
-    resources: { ru } 
+    lng: 'ru',
+    debug: true,
+    resources: { ru }
   });
 
   const elements = {
@@ -22,6 +22,7 @@ export default () => {
       url: document.getElementById('url-input'),
     },
     submitButton: document.querySelector('button[type="submit"]'),
+    feedback: document.querySelector('.feedback'),
   };
 
   // Model
@@ -39,13 +40,6 @@ export default () => {
   // View
   const state = watchedState(initialState);
 
-  const renderError = (errMessage) => {
-    const p = document.createElement('p');
-    p.classList.add('mt-2', 'mb-0', 'text-red');
-    p.textContent = errMessage;
-    elements.form.append(p);
-  };
-
   // Controller
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -62,15 +56,15 @@ export default () => {
         console.log(state.inputUrl.feeds);
         state.inputUrl.stat = 'valid';
         elements.fields.url.classList.remove('is-invalid');
+        elements.feedback.textContent = '';
       })
       .catch((err) => {
-        console.log(err);
-        state.inputUrl.errors.push(err);
+        state.inputUrl.errors.push(err.message);
         state.inputUrl.stat = 'invalid';
         elements.fields.url.value = '';
         elements.fields.url.classList.add('is-invalid');
         console.log(state.inputUrl.errors);
-        renderError(err);
+        elements.feedback.textContent = err.message
       });
   });
 };
