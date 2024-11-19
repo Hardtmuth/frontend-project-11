@@ -6,8 +6,12 @@ import './style.scss';
 
 import watchedState from './view.js';
 import validate from './validate.js';
+import parseFeed from './parse.js';
 
-// const render = () => {}; // TODO - write render
+const render = (feedsList) => {
+  console.log('feed list is: ', feedsList);
+  feedsList.forEach(parseFeed);
+}; // TODO - write render
 
 export default () => {
   i18next.init({
@@ -49,11 +53,11 @@ export default () => {
 
     validate(state.inputUrl.data.url, initialState)
       .then((val) => {
-        console.log(val);
+        // console.log(val);
         state.inputUrl.errors = [];
         elements.fields.url.value = '';
         initialState.inputUrl.feeds.push(val.url);
-        console.log(state.inputUrl.feeds);
+        // console.log(state.inputUrl.feeds);
         state.inputUrl.stat = 'valid';
         elements.fields.url.classList.remove('is-invalid');
         elements.feedback.textContent = '';
@@ -63,8 +67,10 @@ export default () => {
         state.inputUrl.stat = 'invalid';
         elements.fields.url.value = '';
         elements.fields.url.classList.add('is-invalid');
-        console.log(state.inputUrl.errors);
+        // console.log(state.inputUrl.errors);
         elements.feedback.textContent = err.message
       });
+
+    render(state.inputUrl.feeds);
   });
 };
