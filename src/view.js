@@ -10,6 +10,6 @@ const watchedState = (initialState) => onChange(initialState, (path, value, prev
       buttn.disabled = true;
     }
   } */
-}); // DONE - move to a separate file
+});
 
 export default watchedState;
