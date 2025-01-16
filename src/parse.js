@@ -18,6 +18,11 @@ export default (url) => {
     console.log(title);
     console.log(description);
 
+    const res = { title, description, posts };
+    console.log('parsed res is: ', res);
+
+    return res;
+
    /*  // add to feed list
     const feedsList = document.querySelector('.feeds');
 
