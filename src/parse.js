@@ -12,7 +12,15 @@ export default (url) => {
     const doc1 = parser.parseFromString(xmlString, "application/xml");
     const title = doc1.getElementsByTagName('title')[0].childNodes[0].nodeValue;
     const description = doc1.getElementsByTagName('description')[0].childNodes[0].nodeValue;
-    const posts = doc1.querySelectorAll('item');
+    const postsData = doc1.querySelectorAll('item');
+
+    const posts = {};
+    postsData.forEach((post, id) => {
+      const data = {};
+      data.title = post.getElementsByTagName('title')[0].childNodes[0].nodeValue;
+      data.text = post.getElementsByTagName('description')[0].childNodes[0].nodeValue;
+      posts[id] = data;
+    });
 
     console.log(doc1);
     console.log(title);
