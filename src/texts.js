@@ -1,8 +1,17 @@
 export default {
   translation: {
     errors: {
-      notValid: 'Ссылка должна быть валидным URL',
+      notValidUrl: 'Ссылка должна быть валидным URL',
       alreadyAdded: 'RSS уже существует',
+      notValidRss: 'Ресурс не содержит валидный RSS',
+    },
+    buttons: {
+      add: 'Добавить',
+      view: 'Просмотр',
+    },
+    listHeaders: {
+      posts: 'Посты',
+      feeds: 'Фиды',
     },
   },
 };

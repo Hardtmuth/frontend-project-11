@@ -7,7 +7,7 @@ const validate = (url, state) => {
       notOneOf: i18next.t('errors.alreadyAdded'),
     },
     string: {
-      url: i18next.t('errors.notValid'),
+      url: i18next.t('errors.notValidUrl'),
     },
   });
   const schema = object({

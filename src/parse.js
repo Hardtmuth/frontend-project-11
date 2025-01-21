@@ -1,13 +1,22 @@
 import axios from 'axios';
-//import { prefetch } from 'webpack';
+import i18next from 'i18next';
 
 export default (url) => {
   return axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
   .then((response) => {
+    console.log(response);
+    const httpCode = response.data.status.http_code;
+    console.log(httpCode);
+    if (httpCode === 200) {
+      return response
+    }
+    throw new Error(i18next.t('errors.notValidUrl'));
+  })
+  .then((jso) => {
     // handle success
     const parser = new DOMParser();
 
-    const xmlString = response.data.contents;
+    const xmlString = jso.data.contents;
     const doc1 = parser.parseFromString(xmlString, "application/xml");
     const title = doc1.getElementsByTagName('title')[0].childNodes[0].nodeValue;
     const description = doc1.getElementsByTagName('description')[0].childNodes[0].nodeValue;
@@ -24,9 +33,5 @@ export default (url) => {
     const res = { title, description, posts };
 
     return res;
-  })
-  .catch((error) => {
-    // handle error
-    console.log(error);
   })
 };

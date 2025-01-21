@@ -1,4 +1,5 @@
 import onChange from 'on-change';
+import i18next from 'i18next';
 
 const watchedState = (initialState) => onChange(initialState, (path, value, prev) => {
   const render = (feedsList) => {
@@ -17,7 +18,7 @@ const watchedState = (initialState) => onChange(initialState, (path, value, prev
       feedsContainerHeader.classList.add('card-body');
       const titleFeeds = document.createElement('h2');
       titleFeeds.classList.add('card-title', 'h4');
-      titleFeeds.textContent = 'Фиды'; // FIX change to i18
+      titleFeeds.textContent = i18next.t('listHeaders.feeds'); // FIX change to i18
   
       feedsContainerHeader.append(titleFeeds);
       feedsContainer.append(feedsContainerHeader);
@@ -34,7 +35,7 @@ const watchedState = (initialState) => onChange(initialState, (path, value, prev
       postsContainerHeader.classList.add('card-body');
       const titlePosts = document.createElement('h2');
       titlePosts.classList.add('card-title', 'h4');
-      titlePosts.textContent = 'Посты'; // FIX change to i18
+      titlePosts.textContent = i18next.t('listHeaders.posts'); // FIX change to i18
   
       postsContainerHeader.append(titlePosts);
       postsContainer.append(postsContainerHeader);
@@ -86,7 +87,7 @@ const watchedState = (initialState) => onChange(initialState, (path, value, prev
 
         const btn = document.createElement('button');
         btn.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-        btn.textContent = 'Просмотр'; // FIX change to i18
+        btn.textContent = i18next.t('buttons.view');
 
         postItem.append(href);
         postItem.append(btn);
