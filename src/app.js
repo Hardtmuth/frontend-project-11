@@ -76,6 +76,9 @@ export default () => {
         });
         state.data.feeds.push(thisFeed);
         state.data.posts.push(...postsWithFeedId);
+        elements.feedback.classList.remove('text-danger');
+        elements.feedback.classList.add('text-success');
+        elements.feedback.textContent = i18next.t('errors.downloadSuccess');
       })
       .catch((err) => {
         state.inputUrl.errors.push(err.message);
@@ -83,6 +86,8 @@ export default () => {
         elements.fields.url.value = '';
         elements.fields.url.classList.add('is-invalid');
         // console.log(state.inputUrl.errors);
+        elements.feedback.classList.remove('text-success');
+        elements.feedback.classList.add('text-danger');
         elements.feedback.textContent = err.message;
       });
   });

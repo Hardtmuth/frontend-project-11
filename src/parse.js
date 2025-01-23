@@ -4,9 +4,9 @@ import i18next from 'i18next';
 export default (url) => {
   return axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
   .then((response) => {
-    // console.log(response);
+    console.log(response);
     const httpCode = response.data.status.http_code;
-    // console.log(httpCode);
+    console.log(httpCode);
     if (httpCode === 200) {
       return response
     }
