@@ -2,8 +2,8 @@ import onChange from 'on-change';
 import i18next from 'i18next';
 
 const watchedState = (initialState) => onChange(initialState, (path, value, prev) => {
-  const render = (feedsList) => {
-    console.log('feed list is: ', feedsList);
+  const render = (data) => {
+    console.log('feed list is: ', data);
   
     const feeds = document.querySelector('.feeds');
     const posts = document.querySelector('.posts');
@@ -18,7 +18,7 @@ const watchedState = (initialState) => onChange(initialState, (path, value, prev
       feedsContainerHeader.classList.add('card-body');
       const titleFeeds = document.createElement('h2');
       titleFeeds.classList.add('card-title', 'h4');
-      titleFeeds.textContent = i18next.t('listHeaders.feeds'); // FIX change to i18
+      titleFeeds.textContent = i18next.t('listHeaders.feeds');
   
       feedsContainerHeader.append(titleFeeds);
       feedsContainer.append(feedsContainerHeader);
@@ -35,7 +35,7 @@ const watchedState = (initialState) => onChange(initialState, (path, value, prev
       postsContainerHeader.classList.add('card-body');
       const titlePosts = document.createElement('h2');
       titlePosts.classList.add('card-title', 'h4');
-      titlePosts.textContent = i18next.t('listHeaders.posts'); // FIX change to i18
+      titlePosts.textContent = i18next.t('listHeaders.posts');
   
       postsContainerHeader.append(titlePosts);
       postsContainer.append(postsContainerHeader);
@@ -51,12 +51,9 @@ const watchedState = (initialState) => onChange(initialState, (path, value, prev
     loadedPostsList.classList.add('list-group', 'border-0', 'rounded-0');
     posts.append(loadedPostsList);
 
-    const ids = Object.keys(feedsList);
-
-    ids.forEach((id) => {
-      const feedTitle = feedsList[id].title;
-      const feedDescr = feedsList[id].description;
-      const feedPosts = feedsList[id].posts;
+    data.feeds.forEach((feed) => {
+      const feedTitle = feed.title;
+      const feedDescr = feed.description;
 
       const feedCard = document.createElement('li');
       feedCard.classList.add('list-group-item', 'border-0', 'border-end-0');
@@ -73,28 +70,25 @@ const watchedState = (initialState) => onChange(initialState, (path, value, prev
       feedCard.append(feedCardDescr);
 
       loadedFeedsList.append(feedCard);
+    });
+    data.posts.forEach((post) => {
+      const postItem = document.createElement('li');
+      postItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
 
+      const href = document.createElement('a');
+      href.classList.add('fw-bold');
+      href.setAttribute('href', "http://google.com"); // FIX URL
+      href.textContent = post.title;
 
-      const postsIds = Object.values(feedPosts);
-      postsIds.forEach((post) => {
-        const postItem = document.createElement('li');
-        postItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
+      const btn = document.createElement('button');
+      btn.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+      btn.textContent = i18next.t('buttons.view');
 
-        const href = document.createElement('a');
-        href.classList.add('fw-bold');
-        href.setAttribute('href', "http://google.com"); // FIX URL
-        href.textContent = post.title;
+      postItem.append(href);
+      postItem.append(btn);
 
-        const btn = document.createElement('button');
-        btn.classList.add('btn', 'btn-outline-primary', 'btn-sm');
-        btn.textContent = i18next.t('buttons.view');
-
-        postItem.append(href);
-        postItem.append(btn);
-
-        loadedPostsList.append(postItem);
-      });
-    })
+      loadedPostsList.append(postItem);
+    });
 
   };
 

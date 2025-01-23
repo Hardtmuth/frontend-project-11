@@ -34,7 +34,10 @@ export default () => {
       feeds: [],
       errors: [],
     },
-    data: {},
+    data: {
+      feeds: [],
+      posts: [],
+    },
   };
 
   // View
@@ -62,8 +65,17 @@ export default () => {
       })
       .then(parseFeed)
       .then((parsedData) => {
-        const feedId = Object.keys(state.data).length;
-        state.data[feedId] = parsedData;
+        // console.log(parsedData);
+
+        const feedId = Object.keys(state.data.feeds).length;
+        const { title, description, posts } = parsedData;
+        const thisFeed = { feedId, title, description };
+        const postsWithFeedId = posts.map((post) => {
+          post.feedId = feedId;
+          return post;
+        });
+        state.data.feeds.push(thisFeed);
+        state.data.posts.push(...postsWithFeedId);
       })
       .catch((err) => {
         state.inputUrl.errors.push(err.message);
