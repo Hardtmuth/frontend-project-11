@@ -1,7 +1,7 @@
 import { object, string, setLocale } from 'yup';
 import i18next from 'i18next';
 
-const validate = (url, state) => {
+const validate = (url, list) => {
   setLocale({
     mixed: {
       notOneOf: i18next.t('errors.alreadyAdded'),
@@ -12,8 +12,8 @@ const validate = (url, state) => {
   });
   const schema = object({
     url: string()
-      .notOneOf(state.inputUrl.feeds)
-      .url()
+      .notOneOf(list)
+      .url(),
   });
   return schema.validate({ url });
 };
