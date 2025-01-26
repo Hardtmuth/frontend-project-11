@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, forEach } from 'lodash';
 
 import 'bootstrap';
 import ru from './texts.js';
@@ -45,7 +45,7 @@ export default () => {
   // Controller
   const feedlist = [...state.inputUrl.feedList];
 
-  const afterValidateHandler = (val) => {
+  const prepareForParsing = (val) => {
     feedlist.push(val.url);
     state.inputUrl = {
       stat: 'valid',
@@ -58,7 +58,7 @@ export default () => {
     return val.url;
   };
 
-  const afterParserHandler = (parsedData) => {
+  const prepareForRender = (parsedData) => {
     const feedId = Object.keys(state.content.feeds).length;
     const { title, description, posts } = parsedData;
     const thisFeed = { feedId, title, description };
@@ -88,15 +88,41 @@ export default () => {
     elements.feedback.textContent = err.message;
   };
 
+  const compareHeaders = (newPosts, oldPosts) => { // FIX need to rewrite
+    console.log('newPosts: ', newPosts);
+    console.log('oldPosts: ', oldPosts);
+
+    const oldPostsHeaders = oldPosts.map((post) => post.title);
+
+    const compareResult = newPosts.filter((post) => !post.title.includes(oldPostsHeaders));
+    console.log('compareResult is: ', compareResult);
+    return compareResult;
+  };
+
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const value = formData.get('url');
 
     validate(value, feedlist)
-      .then(afterValidateHandler)
+      .then(prepareForParsing)
       .then(parse)
-      .then(afterParserHandler)
+      .then(prepareForRender)
       .catch(errorHandler);
   });
+
+  const run = (list) => {
+    console.log('list is: ', list);
+    if (list) {
+      list.forEach((item) => {
+        parse(item)
+          .then((newPsts) => compareHeaders(newPsts.posts, feedlist)) // FIX mapping error
+          .then(prepareForRender)
+          .catch(errorHandler);
+      })
+    }
+    setTimeout(() => run(feedlist), 5000);
+  };
+
+  setTimeout(() => run(feedlist), 5000);
 };
