@@ -58,9 +58,8 @@ export default () => {
     return val.url;
   };
 
-  const prepareForRender = (parsedData) => {
+  const prepareForRender = ({ title, description, posts }) => {
     const feedId = Object.keys(state.content.feeds).length;
-    const { title, description, posts } = parsedData;
     const thisFeed = { feedId, title, description };
     const postsWithFeedId = posts.map((post) => {
       const postWithID = post;
@@ -88,15 +87,20 @@ export default () => {
     elements.feedback.textContent = err.message;
   };
 
-  const compareHeaders = (newPosts, oldPosts) => { // FIX need to rewrite
-    console.log('newPosts: ', newPosts);
-    console.log('oldPosts: ', oldPosts);
+  const compareHeaders = (newPosts, oldPosts) => { // FIX feeds undefined and 0 postId
+    // console.log('newPosts: ', newPosts);
+    // console.log('oldPosts: ', oldPosts);
 
     const oldPostsHeaders = oldPosts.map((post) => post.title);
+    // console.log('oldPostsHeaders is: ', oldPostsHeaders);
 
-    const compareResult = newPosts.filter((post) => !post.title.includes(oldPostsHeaders));
-    console.log('compareResult is: ', compareResult);
-    return compareResult;
+    const compareResult = newPosts.filter((post) => {
+      // console.log('post title is: ', post.title);
+      // console.log('this post includes? - ', oldPostsHeaders.includes(post.title));
+      return !oldPostsHeaders.includes(post.title);
+    });
+    // console.log('compareResult is: ', compareResult);
+    return { posts: compareResult };
   };
 
   elements.form.addEventListener('submit', (e) => {
@@ -116,7 +120,7 @@ export default () => {
     if (list) {
       list.forEach((item) => {
         parse(item)
-          .then((newPsts) => compareHeaders(newPsts.posts, feedlist)) // FIX mapping error
+          .then((newPsts) => compareHeaders(newPsts.posts, state.content.posts))
           .then(prepareForRender)
           .catch(errorHandler);
       })
