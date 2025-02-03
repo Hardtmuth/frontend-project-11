@@ -75,7 +75,72 @@ const render = (path, content) => {
 
       const btn = document.createElement('button');
       btn.classList.add('btn', 'btn-outline-primary', 'btn-sm');
+      btn.setAttribute('data-bs-toggle', 'modal');
+      btn.setAttribute('data-bs-target', `#postId-${post.postId}`);
       btn.textContent = i18next.t('buttons.view');
+      // Modal
+      btn.addEventListener('click' , (e) => {
+        e.preventDefault();
+
+        const modal = document.createElement('div');
+        modal.classList.add('modal', 'fade');
+        modal.setAttribute('id', `postId-${post.postId}`);
+        modal.setAttribute('tabindex', '-1');
+        // modal.setAttribute('data-bs-backdrop', 'static');
+        modal.setAttribute('aria-labelledby', post.title);
+        modal.setAttribute('aria-hidden', 'true');
+
+        const modalDialog = document.createElement('div');
+        const modalContent = document.createElement('div');
+        
+
+        // header
+        const modalHeader = document.createElement('div');
+
+        const headerText = document.createElement('h5');
+        headerText.classList.add('modal-title');
+        headerText.textContent = post.title;
+
+        const headerCloseBtn = document.createElement('button');
+        headerCloseBtn.classList.add('btn-close');
+        headerCloseBtn.setAttribute('data-bs-dismiss', 'modal');
+        headerCloseBtn.setAttribute('aria-label', 'Close');
+        
+        modalHeader.append(headerText);
+        modalHeader.append(headerCloseBtn);
+
+        // modal body
+        const modalBody = document.createElement('div');
+        const modalBodyText = document.createElement('p');
+        modalBodyText.textContent = post.text;
+
+        modalBody.append(modalBodyText);
+
+        // modal footer
+        const modalFooter = document.createElement('div');
+
+        const footerRead = document.createElement('button');
+        footerRead.classList.add('btn', 'btn-secondary');
+        // footerRead.setAttribute('data-bs-dismiss', 'modal');
+        footerRead.textContent = 'Читать полностью'; // FIX change to i18
+
+        const footerClose = document.createElement('button');
+        footerClose.classList.add('btn', 'btn-primary');
+        footerClose.setAttribute('data-bs-dismiss', 'modal');
+        footerClose.textContent = 'Закрыть'; // FIX change to i18
+
+        modalFooter.append(footerRead);
+        modalFooter.append(footerClose);
+
+        // Matryoshka
+        modalContent.append(modalHeader);
+        modalContent.append(modalBody);
+        modalContent.append(modalFooter);
+
+        modalDialog.append(modalContent);
+
+        modal.append(modalDialog);
+      });
 
       postItem.append(href);
       postItem.append(btn);

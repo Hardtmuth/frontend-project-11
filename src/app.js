@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import { cloneDeep, forEach } from 'lodash';
+// import cloneDeep from 'lodash';
 
 import 'bootstrap';
 import ru from './texts.js';
@@ -63,7 +63,10 @@ export default () => {
       feedId = Object.keys(state.content.feeds).length;
     }
     
-    const updatedContent = cloneDeep(state.content);
+    //const updatedContent = cloneDeep(state.content);
+    const updatedContent = Object.assign({}, state.content);
+    console.log('updatedContent is: ', updatedContent);
+    
     if (title) {
       const thisFeed = { feedId, title, description };
       updatedContent.feeds.push(thisFeed);
@@ -74,7 +77,6 @@ export default () => {
       postWithID.feedId = feedId;
       return postWithID;
     });
-
     updatedContent.posts.push(...postsWithFeedId);
     state.content = updatedContent;
 
