@@ -87,8 +87,9 @@ const render = (path, content) => {
   }
 };
 
-const watchedState = (state) => onChange(state, (path, content) => render(path, content));
+const watchedState = (state) => onChange(state, render);
 
 export default watchedState;
 
 // https://feeds.simplecast.com/54nAGcIl
+// https://www.theguardian.com/international/rss

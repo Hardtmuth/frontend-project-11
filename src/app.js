@@ -58,16 +58,23 @@ export default () => {
     return val.url;
   };
 
-  const prepareForRender = ({ title, description, posts }) => {
-    const feedId = Object.keys(state.content.feeds).length;
-    const thisFeed = { feedId, title, description };
+  const prepareForRender = ({ feedId, title, description, posts }) => {
+    if (feedId === undefined) {
+      feedId = Object.keys(state.content.feeds).length;
+    }
+    
+    const updatedContent = cloneDeep(state.content);
+    if (title) {
+      const thisFeed = { feedId, title, description };
+      updatedContent.feeds.push(thisFeed);
+    }
+    
     const postsWithFeedId = posts.map((post) => {
       const postWithID = post;
       postWithID.feedId = feedId;
       return postWithID;
     });
-    const updatedContent = cloneDeep(state.content);
-    updatedContent.feeds.push(thisFeed);
+
     updatedContent.posts.push(...postsWithFeedId);
     state.content = updatedContent;
 
@@ -88,13 +95,14 @@ export default () => {
   };
 
   const compareHeaders = (newPosts, oldPosts) => { // FIX feeds undefined and 0 postId
+    const feedId = newPosts.feedId;
     // console.log('newPosts: ', newPosts);
     // console.log('oldPosts: ', oldPosts);
 
     const oldPostsHeaders = oldPosts.map((post) => post.title);
     // console.log('oldPostsHeaders is: ', oldPostsHeaders);
 
-    const compareResult = newPosts.filter((post) => {
+    const compareResult = newPosts.posts.filter((post) => {
       // console.log('post title is: ', post.title);
       // console.log('this post includes? - ', oldPostsHeaders.includes(post.title));
       return !oldPostsHeaders.includes(post.title);
@@ -116,11 +124,12 @@ export default () => {
   });
 
   const run = (list) => {
-    console.log('list is: ', list);
-    if (list) {
+    
+    if (list.length) {
+      console.log('list is: ', list);
       list.forEach((item) => {
         parse(item)
-          .then((newPsts) => compareHeaders(newPsts.posts, state.content.posts))
+          .then((newPsts) => compareHeaders(newPsts, state.content.posts))
           .then(prepareForRender)
           .catch(errorHandler);
       })
