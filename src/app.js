@@ -1,5 +1,4 @@
 import i18next from 'i18next';
-// import cloneDeep from 'lodash';
 
 import 'bootstrap';
 import ru from './texts.js';
@@ -63,9 +62,7 @@ export default () => {
       feedId = Object.keys(state.content.feeds).length;
     }
     
-    //const updatedContent = cloneDeep(state.content);
     const updatedContent = Object.assign({}, state.content);
-    console.log('updatedContent is: ', updatedContent);
     
     if (title) {
       const thisFeed = { feedId, title, description };
@@ -97,19 +94,10 @@ export default () => {
   };
 
   const compareHeaders = (newPosts, oldPosts) => { // FIX feeds undefined and 0 postId
-    const feedId = newPosts.feedId;
-    // console.log('newPosts: ', newPosts);
-    // console.log('oldPosts: ', oldPosts);
-
     const oldPostsHeaders = oldPosts.map((post) => post.title);
-    // console.log('oldPostsHeaders is: ', oldPostsHeaders);
-
     const compareResult = newPosts.posts.filter((post) => {
-      // console.log('post title is: ', post.title);
-      // console.log('this post includes? - ', oldPostsHeaders.includes(post.title));
       return !oldPostsHeaders.includes(post.title);
     });
-    // console.log('compareResult is: ', compareResult);
     return { posts: compareResult };
   };
 
@@ -125,10 +113,32 @@ export default () => {
       .catch(errorHandler);
   });
 
-  const run = (list) => {
+  elements.posts.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('target node name is: ', e.target.nodeName);
+    const data = e.target.parentNode;
+
+    const res = Object.assign({}, state.openPost)
+    if (e.target.nodeName === 'LI') {
+      return;
+    }
+    if (e.target.nodeName === 'BUTTON') {
+      res.href = data.lastChild.getAttribute('data-bs-target');
+    }
+      
+    if (e.target.nodeName === 'A') {
+      res.href = data.firstChild.getAttribute('href');
+    }
+
+    const id = data.lastChild.getAttribute('data-bs-target').split('-')[1];
+    state.content.visited.push(id);
     
+    state.openPost = res;
+  });
+
+  /* const run = (list) => {
     if (list.length) {
-      console.log('list is: ', list);
+      // console.log('list is: ', list);
       list.forEach((item) => {
         parse(item)
           .then((newPsts) => compareHeaders(newPsts, state.content.posts))
@@ -139,5 +149,5 @@ export default () => {
     setTimeout(() => run(feedlist), 5000);
   };
 
-  setTimeout(() => run(feedlist), 5000);
+  setTimeout(() => run(feedlist), 5000); */
 };
