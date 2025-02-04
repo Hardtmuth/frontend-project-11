@@ -113,7 +113,7 @@ export default () => {
       .catch(errorHandler);
   });
 
-  elements.posts.addEventListener('click', (e) => {
+  /* elements.posts.addEventListener('click', (e) => {
     e.preventDefault();
     console.log('target node name is: ', e.target.nodeName);
     const data = e.target.parentNode;
@@ -134,7 +134,7 @@ export default () => {
     state.content.visited.push(id);
     
     state.openPost = res;
-  });
+  }); */
 
   /* const run = (list) => {
     if (list.length) {

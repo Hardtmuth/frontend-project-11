@@ -7,6 +7,7 @@ const render = (path, content) => {
   if (path === 'content') {
     const feeds = document.querySelector('.feeds');
     const posts = document.querySelector('.posts');
+    const modal = document.querySelector('.modal');
 
     // Headers
     if (feeds) {
@@ -73,29 +74,42 @@ const render = (path, content) => {
       href.setAttribute('href', post.url);
       href.textContent = post.title;
 
+      href.addEventListener('click', (e) => {
+        e.preventDefault();
+        href.classList.replace('fw-bold', 'fw-normal');
+        window.open(post.url, '_blank');
+      })
+
       const btn = document.createElement('button');
       btn.classList.add('btn', 'btn-outline-primary', 'btn-sm');
       btn.setAttribute('data-bs-toggle', 'modal');
-      btn.setAttribute('data-bs-target', `#postId-${post.postId}`);
+      btn.setAttribute('data-bs-target', `#modal`);
       btn.textContent = i18next.t('buttons.view');
       // Modal
       btn.addEventListener('click' , (e) => {
         e.preventDefault();
+        href.classList.replace('fw-bold', 'fw-normal');
+        modal.setAttribute('id', 'modal');
 
-        const modal = document.createElement('div');
-        modal.classList.add('modal', 'fade');
-        modal.setAttribute('id', `postId-${post.postId}`);
-        modal.setAttribute('tabindex', '-1');
+        modal.innerHTML = ' ';
+
+        //const modal = document.createElement('div');
+        // modal.classList.add('modal', 'fade');
+        //modal.setAttribute('id', `postId-${post.postId}`);
+        //modal.setAttribute('tabindex', '-1');
         // modal.setAttribute('data-bs-backdrop', 'static');
-        modal.setAttribute('aria-labelledby', post.title);
-        modal.setAttribute('aria-hidden', 'true');
+        //modal.setAttribute('aria-labelledby', post.title);
+        //modal.setAttribute('aria-hidden', 'true');
 
         const modalDialog = document.createElement('div');
+        modalDialog.classList.add('modal-dialog');
         const modalContent = document.createElement('div');
-        
+        modalContent.classList.add('modal-content');
+
 
         // header
         const modalHeader = document.createElement('div');
+        modalHeader.classList.add('modal-header');
 
         const headerText = document.createElement('h5');
         headerText.classList.add('modal-title');
@@ -105,12 +119,14 @@ const render = (path, content) => {
         headerCloseBtn.classList.add('btn-close');
         headerCloseBtn.setAttribute('data-bs-dismiss', 'modal');
         headerCloseBtn.setAttribute('aria-label', 'Close');
-        
+
         modalHeader.append(headerText);
         modalHeader.append(headerCloseBtn);
 
         // modal body
         const modalBody = document.createElement('div');
+        modalBody.classList.add('modal-body');
+
         const modalBodyText = document.createElement('p');
         modalBodyText.textContent = post.text;
 
@@ -118,11 +134,17 @@ const render = (path, content) => {
 
         // modal footer
         const modalFooter = document.createElement('div');
+        modalFooter.classList.add('modal-footer');
 
         const footerRead = document.createElement('button');
         footerRead.classList.add('btn', 'btn-secondary');
+        footerRead.setAttribute('href', post.href);
         // footerRead.setAttribute('data-bs-dismiss', 'modal');
         footerRead.textContent = 'Читать полностью'; // FIX change to i18
+        footerRead.addEventListener('click' , (e) => {
+          e.preventDefault();
+          window.open(post.url, '_blank');
+        }) 
 
         const footerClose = document.createElement('button');
         footerClose.classList.add('btn', 'btn-primary');
