@@ -22,6 +22,7 @@ export default () => {
     },
     submitButton: document.querySelector('button[type="submit"]'),
     feedback: document.querySelector('.feedback'),
+    posts: document.querySelector('.posts'),
   };
 
   // Model
@@ -35,7 +36,9 @@ export default () => {
     content: {
       feeds: [],
       posts: [],
+      visited: [],
     },
+    
   };
 
   // View
@@ -113,32 +116,31 @@ export default () => {
       .catch(errorHandler);
   });
 
-  /* elements.posts.addEventListener('click', (e) => {
+  elements.posts.addEventListener('click', (e) => {
     e.preventDefault();
     console.log('target node name is: ', e.target.nodeName);
     const data = e.target.parentNode;
 
-    const res = Object.assign({}, state.openPost)
+    //const res = Object.assign({}, state.openPost)
     if (e.target.nodeName === 'LI') {
       return;
     }
     if (e.target.nodeName === 'BUTTON') {
-      res.href = data.lastChild.getAttribute('data-bs-target');
+      //res.href = data.lastChild.getAttribute('data-bs-target');
     }
-      
+
     if (e.target.nodeName === 'A') {
-      res.href = data.firstChild.getAttribute('href');
+      //res.href = data.firstChild.getAttribute('href');
     }
 
     const id = data.lastChild.getAttribute('data-bs-target').split('-')[1];
-    state.content.visited.push(id);
-    
-    state.openPost = res;
-  }); */
+    state.content.visited.push(data.firstChild.textContent);
 
-  /* const run = (list) => {
+  });
+
+  const run = (list) => {
     if (list.length) {
-      // console.log('list is: ', list);
+      console.log('list is: ', list);
       list.forEach((item) => {
         parse(item)
           .then((newPsts) => compareHeaders(newPsts, state.content.posts))
@@ -149,5 +151,5 @@ export default () => {
     setTimeout(() => run(feedlist), 5000);
   };
 
-  setTimeout(() => run(feedlist), 5000); */
+  setTimeout(() => run(feedlist), 5000);
 };

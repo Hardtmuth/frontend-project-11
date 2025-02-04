@@ -9,6 +9,8 @@ const render = (path, content) => {
     const posts = document.querySelector('.posts');
     const modal = document.querySelector('.modal');
 
+    console.log(content.visited);
+
     // Headers
     if (feeds) {
       feeds.innerHTML = '';
@@ -71,6 +73,10 @@ const render = (path, content) => {
 
       const href = document.createElement('a');
       href.classList.add('fw-bold');
+      if (content.visited.includes(post.title)) {
+        href.classList.replace('fw-bold', 'fw-normal');
+      }
+
       href.setAttribute('href', post.url);
       href.textContent = post.title;
 
@@ -91,15 +97,8 @@ const render = (path, content) => {
         href.classList.replace('fw-bold', 'fw-normal');
         modal.setAttribute('id', 'modal');
 
-        modal.innerHTML = ' ';
+        modal.innerHTML = '';
 
-        //const modal = document.createElement('div');
-        // modal.classList.add('modal', 'fade');
-        //modal.setAttribute('id', `postId-${post.postId}`);
-        //modal.setAttribute('tabindex', '-1');
-        // modal.setAttribute('data-bs-backdrop', 'static');
-        //modal.setAttribute('aria-labelledby', post.title);
-        //modal.setAttribute('aria-hidden', 'true');
 
         const modalDialog = document.createElement('div');
         modalDialog.classList.add('modal-dialog');
@@ -144,7 +143,7 @@ const render = (path, content) => {
         footerRead.addEventListener('click' , (e) => {
           e.preventDefault();
           window.open(post.url, '_blank');
-        }) 
+        });
 
         const footerClose = document.createElement('button');
         footerClose.classList.add('btn', 'btn-primary');
