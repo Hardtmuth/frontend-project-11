@@ -11,6 +11,8 @@ export default {
     buttons: {
       add: 'Добавить',
       view: 'Просмотр',
+      read: 'Читать полностью',
+      close: 'Закрыть',
     },
     listHeaders: {
       posts: 'Посты',
