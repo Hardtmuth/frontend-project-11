@@ -56,10 +56,10 @@ export default () => {
 
     console.log('resp status: ', response.data.status);
 
-    if (response.data.status.http_code === 200) {
+    if (response.status === 200) {
       return response;
     }
-    if (response.data.status.http_code > 404) {
+    if (response.status > 404) {
       throw new Error(i18next.t('errors.downloadFail'));
     }
     throw new Error(i18next.t('errors.notValidUrl'));
