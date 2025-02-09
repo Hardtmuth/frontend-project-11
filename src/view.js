@@ -111,7 +111,7 @@ const renderModal = ({ title, text, url }) => {
   modal.append(modalDialog);
 };
 
-const addPosts = (postsList, visited) => { // FIX trimm to 25 lines
+const addPosts = (postsList, visited) => {
   const loadedPostsList = document.createElement('ul');
   loadedPostsList.classList.add('list-group', 'border-0', 'rounded-0');
 

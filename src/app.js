@@ -48,7 +48,7 @@ export default () => {
   const state = watchedState(initialState);
 
   // Controller
-  const feedlist = [...state.inputUrl.feedList];
+  const feedlist = { l: [...state.inputUrl.feedList]};
 
   const download = (url) => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
   .then((response) => {
@@ -57,6 +57,12 @@ export default () => {
     console.log('resp status: ', response.data.status);
 
     if (response.status === 200) {
+      if (response.data.contents === null || !response.data.contents.startsWith('<?xml')) { // FIX change RSS list trim
+        console.log(response.data.status.url, feedlist.l);
+        const ff = feedlist.l.filter((i) => i !== response.data.status.url);
+        feedlist.l = ff;
+        throw new Error(i18next.t('errors.notValidRss'));
+      }
       return response;
     }
     if (response.status > 404) {
@@ -66,11 +72,11 @@ export default () => {
   });
 
   const prepareForParsing = (val) => {
-    feedlist.push(val.url);
+    feedlist.l.push(val.url);
     state.inputUrl = {
       stat: 'valid',
       errors: [],
-      feedlist,
+      feedlist: [],
     };
     elements.fieldUrl.value = '';
     elements.fieldUrl.classList.remove('is-invalid');
@@ -131,7 +137,7 @@ export default () => {
     const formData = new FormData(e.target);
     const value = formData.get('url');
 
-    validate(value, feedlist)
+    validate(value, feedlist.l)
       .then(prepareForParsing)
       .then(download)
       .then(parse)
@@ -149,7 +155,8 @@ export default () => {
   });
 
   const run = (list) => {
-    if (list.length) {
+    console.log(list);
+    if (list) {
       list.forEach((url) => {
         download(url)
           .then(parse)
@@ -158,7 +165,7 @@ export default () => {
           .catch(errorHandler);
       });
     }
-    setTimeout(() => run(feedlist), 5000);
+    setTimeout(() => run(feedlist.l), 5000);
   };
-  setTimeout(() => run(feedlist), 5000);
+  setTimeout(() => run(feedlist.l), 5000);
 };
