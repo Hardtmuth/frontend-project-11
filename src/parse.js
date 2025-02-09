@@ -1,18 +1,4 @@
-import axios from 'axios';
-import i18next from 'i18next';
-
-export default (url) => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
-  .then((response) => {
-    if (response.data.status.http_code === 200) {
-      return response;
-    }
-    if (response.data.status.http_code > 404) {
-      throw new Error(i18next.t('errors.downloadFail'));
-    }
-    throw new Error(i18next.t('errors.notValidUrl'));
-  })
-  .then((responseData) => {
-    // handle success
+export default (responseData) => {
     const parser = new DOMParser();
 
     const xmlString = responseData.data.contents;
@@ -32,4 +18,4 @@ export default (url) => axios.get(`https://allorigins.hexlet.app/get?disableCach
     });
 
     return { title, description, posts };
-  });
+  };

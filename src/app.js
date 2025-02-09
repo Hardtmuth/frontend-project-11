@@ -1,4 +1,5 @@
 import i18next from 'i18next';
+import axios from 'axios';
 
 import 'bootstrap';
 import ru from './texts.js';
@@ -48,6 +49,21 @@ export default () => {
 
   // Controller
   const feedlist = [...state.inputUrl.feedList];
+
+  const download = (url) => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
+  .then((response) => {
+    console.log('all resp: ', response);
+
+    console.log('resp status: ', response.data.status);
+
+    if (response.data.status.http_code === 200) {
+      return response;
+    }
+    if (response.data.status.http_code > 404) {
+      throw new Error(i18next.t('errors.downloadFail'));
+    }
+    throw new Error(i18next.t('errors.notValidUrl'));
+  });
 
   const prepareForParsing = (val) => {
     feedlist.push(val.url);
@@ -117,6 +133,7 @@ export default () => {
 
     validate(value, feedlist)
       .then(prepareForParsing)
+      .then(download)
       .then(parse)
       .then(prepareForRender)
       .catch(errorHandler);
@@ -133,8 +150,9 @@ export default () => {
 
   const run = (list) => {
     if (list.length) {
-      list.forEach((item) => {
-        parse(item)
+      list.forEach((url) => {
+        download(url)
+          .then(parse)
           .then((newPsts) => compareHeaders(newPsts, state.content.posts))
           .then(prepareForRender)
           .catch(errorHandler);
