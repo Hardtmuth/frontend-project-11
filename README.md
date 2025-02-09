@@ -3,6 +3,5 @@
 
 ### CodeClimate
 [![Maintainability](https://api.codeclimate.com/v1/badges/44eaf1064a9137aa8c2a/maintainability)](https://codeclimate.com/github/Hardtmuth/frontend-project-11/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/44eaf1064a9137aa8c2a/test_coverage)](https://codeclimate.com/github/Hardtmuth/frontend-project-11/test_coverage)
 
-https://frontend-project-11-7oda4o6wn-hardtmuths-projects.vercel.app
+https://frontend-project-11-liard-chi.vercel.app/

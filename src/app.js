@@ -21,7 +21,6 @@ export default () => {
     submitButton: document.querySelector('button[type="submit"]'),
     feedback: document.querySelector('.feedback'),
     posts: document.querySelector('.posts'),
-    viewBtns: document.querySelectorAll('button[data-bs-toggle="modal"]'), // FIX add only after add render rss url
   };
 
   // Model
@@ -36,6 +35,11 @@ export default () => {
       feeds: [],
       posts: [],
       visited: [],
+    },
+    modal: {
+      title: '',
+      text: '',
+      url: '',
     },
   };
 
@@ -116,9 +120,6 @@ export default () => {
       .then(parse)
       .then(prepareForRender)
       .catch(errorHandler);
-
-      const ff = document.querySelectorAll('button[data-bs-toggle="modal"]');
-      console.log('ff: ', ff);
   });
 
   elements.posts.addEventListener('click', (e) => {
@@ -128,91 +129,9 @@ export default () => {
       return;
     }
     state.content.visited.push(data.firstChild.textContent);
-
-    
-
-  if (elements.viewBtns.length) {
-    elements.viewBtns.addEventListener('click', (e) => {  // DO THIS - Moved from view.js for right MVC rules
-      e.preventDefault();
-      const focusPost = e.target;
-      console.log(focusPost);
-      const href = '';
-      //modalHandler(e, focusPost, href);
-    });
-  }
   });
 
-  /* const modalHandler = (e, post, href) => {
-    e.preventDefault();
-    href.classList.add('fw-normal')// : href.classList.add('fw-bold');
-    modal.setAttribute('id', 'modal');
-  
-    modal.innerHTML = '';
-  
-    const modalDialog = document.createElement('div');
-    modalDialog.classList.add('modal-dialog');
-    const modalContent = document.createElement('div');
-    modalContent.classList.add('modal-content');
-  
-    // Header
-    const modalHeader = document.createElement('div');
-    modalHeader.classList.add('modal-header');
-  
-    const headerText = document.createElement('h5');
-    headerText.classList.add('modal-title');
-    headerText.textContent = post.title;
-  
-    const headerCloseBtn = document.createElement('button');
-    headerCloseBtn.classList.add('btn-close');
-    headerCloseBtn.setAttribute('data-bs-dismiss', 'modal');
-    headerCloseBtn.setAttribute('aria-label', 'Close');
-  
-    modalHeader.append(headerText);
-    modalHeader.append(headerCloseBtn);
-  
-    // Modal body
-    const modalBody = document.createElement('div');
-    modalBody.classList.add('modal-body');
-  
-    const modalBodyText = document.createElement('p');
-    modalBodyText.textContent = post.text;
-  
-    modalBody.append(modalBodyText);
-  
-    // Modal footer
-    const modalFooter = document.createElement('div');
-    modalFooter.classList.add('modal-footer');
-  
-    const footerRead = document.createElement('button');
-    footerRead.classList.add('btn', 'btn-secondary');
-    footerRead.setAttribute('href', post.href);
-    footerRead.textContent = i18next.t('buttons.read');
-    footerRead.addEventListener('click', (event) => {
-      event.preventDefault();
-      window.open(post.url, '_blank');
-    });
-  
-    const footerClose = document.createElement('button');
-    footerClose.classList.add('btn', 'btn-primary');
-    footerClose.setAttribute('data-bs-dismiss', 'modal');
-    footerClose.textContent = i18next.t('buttons.close');
-  
-    modalFooter.append(footerRead);
-    modalFooter.append(footerClose);
-  
-    // Matryoshka
-    modalContent.append(modalHeader);
-    modalContent.append(modalBody);
-    modalContent.append(modalFooter);
-  
-    modalDialog.append(modalContent);
-  
-    modal.append(modalDialog);
-  }; */
-  // Modal
-  
-
-  /* const run = (list) => {
+  const run = (list) => {
     if (list.length) {
       list.forEach((item) => {
         parse(item)
@@ -223,5 +142,5 @@ export default () => {
     }
     setTimeout(() => run(feedlist), 5000);
   };
-  setTimeout(() => run(feedlist), 5000); */
+  setTimeout(() => run(feedlist), 5000);
 };

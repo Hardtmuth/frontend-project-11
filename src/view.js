@@ -5,8 +5,6 @@ const feeds = document.querySelector('.feeds');
 const posts = document.querySelector('.posts');
 const modal = document.querySelector('.modal');
 
-const isVivsted = (postId, visitedList) => visitedList.includes(postId);
-
 const createHeader = (header) => {
   const element = document.querySelector(`.${header}`);
 
@@ -49,6 +47,70 @@ const addFeeds = (feeddsList) => {
   });
 };
 
+const renderModal = ({ title, text, url }) => {
+  modal.setAttribute('id', 'modal');
+  modal.innerHTML = '';
+
+  const modalDialog = document.createElement('div');
+  modalDialog.classList.add('modal-dialog');
+  const modalContent = document.createElement('div');
+  modalContent.classList.add('modal-content');
+
+  // Header
+  const modalHeader = document.createElement('div');
+  modalHeader.classList.add('modal-header');
+
+  const headerText = document.createElement('h5');
+  headerText.classList.add('modal-title');
+  headerText.textContent = title;
+
+  const headerCloseBtn = document.createElement('button');
+  headerCloseBtn.classList.add('btn-close');
+  headerCloseBtn.setAttribute('data-bs-dismiss', 'modal');
+  headerCloseBtn.setAttribute('aria-label', 'Close');
+
+  modalHeader.append(headerText);
+  modalHeader.append(headerCloseBtn);
+
+  // Modal body
+  const modalBody = document.createElement('div');
+  modalBody.classList.add('modal-body');
+
+  const modalBodyText = document.createElement('p');
+  modalBodyText.textContent = text;
+
+  modalBody.append(modalBodyText);
+
+  // Modal footer
+  const modalFooter = document.createElement('div');
+  modalFooter.classList.add('modal-footer');
+
+  const footerRead = document.createElement('button');
+  footerRead.classList.add('btn', 'btn-secondary');
+  footerRead.setAttribute('href', url);
+  footerRead.textContent = i18next.t('buttons.read');
+  footerRead.addEventListener('click', (event) => {
+    event.preventDefault();
+    window.open(url, '_blank');
+  });
+  const footerClose = document.createElement('button');
+  footerClose.classList.add('btn', 'btn-primary');
+  footerClose.setAttribute('data-bs-dismiss', 'modal');
+  footerClose.textContent = i18next.t('buttons.close');
+
+  modalFooter.append(footerRead);
+  modalFooter.append(footerClose);
+
+  // Matryoshka
+  modalContent.append(modalHeader);
+  modalContent.append(modalBody);
+  modalContent.append(modalFooter);
+
+  modalDialog.append(modalContent);
+
+  modal.append(modalDialog);
+};
+
 const addPosts = (postsList, visited) => { // FIX trimm to 25 lines
   const loadedPostsList = document.createElement('ul');
   loadedPostsList.classList.add('list-group', 'border-0', 'rounded-0');
@@ -59,7 +121,9 @@ const addPosts = (postsList, visited) => { // FIX trimm to 25 lines
 
     const href = document.createElement('a');
     href.classList.add('fw-bold');
-    visited.includes(post.postId) ? href.classList.add('fw-normal') : href.classList.add('fw-bold');
+    if (visited.includes(post.title)) {
+      href.classList.replace('fw-bold', 'fw-normal');
+    }
 
     href.setAttribute('href', post.url);
     href.textContent = post.title;
@@ -76,6 +140,16 @@ const addPosts = (postsList, visited) => { // FIX trimm to 25 lines
     btn.setAttribute('data-bs-target', '#modal');
     btn.textContent = i18next.t('buttons.view');
 
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      href.classList.replace('fw-bold', 'fw-normal');
+      renderModal({
+        title: post.title,
+        text: post.text,
+        url: post.url,
+      });
+    });
+
     postItem.append(href);
     postItem.append(btn);
     loadedPostsList.append(postItem);
@@ -90,6 +164,10 @@ const render = (path, content) => {
 
     createHeader('posts');
     addPosts(content.posts, content.visited);
+  }
+
+  if (path === 'modal') {
+    renderModal(content);
   }
 };
 
