@@ -56,11 +56,11 @@ export default () => {
 
     console.log('resp status: ', response.data);
 
-    if (response.status === 200 && response.data.status) {
+    if (response.status === 200) {
       if (response.data.contents === null || !response.data.contents.startsWith('<?xml')) { // FIX change RSS list trim
-        console.log(response.data.status.url, feedlist.l);
-        const ff = feedlist.l.filter((i) => i !== response.data.status.url);
-        feedlist.l = ff;
+        console.log(response.data, feedlist.l);
+        //const ff = feedlist.l.filter((i) => i !== response.data.status.url);
+        //feedlist.l = ff;
         throw new Error(i18next.t('errors.notValidRss'));
       }
       return response;
