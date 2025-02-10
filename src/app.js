@@ -54,9 +54,9 @@ export default () => {
   .then((response) => {
     console.log('all resp: ', response);
 
-    console.log('resp status: ', response.data.status);
+    console.log('resp status: ', response.data);
 
-    if (response.status === 200) {
+    if (response.status === 200 && response.data.status) {
       if (response.data.contents === null || !response.data.contents.startsWith('<?xml')) { // FIX change RSS list trim
         console.log(response.data.status.url, feedlist.l);
         const ff = feedlist.l.filter((i) => i !== response.data.status.url);
