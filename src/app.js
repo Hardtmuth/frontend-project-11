@@ -123,7 +123,13 @@ export default () => {
     elements.fieldUrl.classList.add('is-invalid');
     elements.feedback.classList.remove('text-success');
     elements.feedback.classList.add('text-danger');
-    elements.feedback.textContent = err.message;
+    // elements.feedback.textContent = err.message;
+
+    if (err.message === 'Network Error') {
+      elements.feedback.textContent = (i18next.t('errors.downloadFail'));
+    } else {
+      elements.feedback.textContent = err.message;
+    }
   };
 
   const compareHeaders = (newPosts, oldPosts) => {
