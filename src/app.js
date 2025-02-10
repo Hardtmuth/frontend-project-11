@@ -48,28 +48,28 @@ export default () => {
   const state = watchedState(initialState);
 
   // Controller
-  const feedlist = { l: [...state.inputUrl.feedList]};
+  const feedlist = { l: [...state.inputUrl.feedList] };
 
   const download = (url) => axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${url}`)
-  .then((response) => {
-    console.log('all resp: ', response);
+    .then((response) => {
+      console.log('all resp: ', response);
 
-    console.log('resp status: ', response.data);
+      console.log('resp status: ', response.data);
 
-    if (response.status === 200) {
-      if (response.data.contents === null || !response.data.contents.startsWith('<?xml')) { // FIX change RSS list trim
-        console.log(response.data, feedlist.l);
-        //const ff = feedlist.l.filter((i) => i !== response.data.status.url);
-        //feedlist.l = ff;
-        throw new Error(i18next.t('errors.notValidRss'));
+      if (response.status === 200) {
+        if (response.data.contents === null || !response.data.contents.startsWith('<?xml')) { // FIX change RSS list trim
+          console.log(response.data, feedlist.l);
+          // const ff = feedlist.l.filter((i) => i !== response.data.status.url);
+          // feedlist.l = ff;
+          throw new Error(i18next.t('errors.notValidRss'));
+        }
+        return response;
       }
-      return response;
-    }
-    if (response.status > 404) {
-      throw new Error(i18next.t('errors.downloadFail'));
-    }
-    throw new Error(i18next.t('errors.notValidUrl'));
-  });
+      if (response.status > 404) {
+        throw new Error(i18next.t('errors.downloadFail'));
+      }
+      throw new Error(i18next.t('errors.notValidUrl'));
+    });
 
   const prepareForParsing = (val) => {
     feedlist.l.push(val.url);
